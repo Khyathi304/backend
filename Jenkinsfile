@@ -15,7 +15,7 @@ pipeline {
     }
 
 
-    stages {
+   stages {
         stage('read the version'){
             steps{
                 script{
