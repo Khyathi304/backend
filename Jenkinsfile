@@ -7,9 +7,7 @@ pipeline {
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
-    parameters{
-        booleanParam(name: 'deploy', defaultValue: false, description: 'Toggle this value')
-    }
+   
     environment{
         def appVersion = '' //variable declaration
         nexusUrl = 'nexus.daws304.online:8081'
