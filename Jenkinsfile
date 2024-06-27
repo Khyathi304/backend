@@ -7,15 +7,14 @@ pipeline {
         disableConcurrentBuilds()
         ansiColor('xterm')
     }
-
-
+    parameters{
+        booleanParam(name: 'deploy', defaultValue: false, description: 'Toggle this value')
+    }
     environment{
         def appVersion = '' //variable declaration
         nexusUrl = 'nexus.daws304.online:8081'
     }
-
-
-   stages {
+    stages {
         stage('read the version'){
             steps{
                 script{
@@ -25,8 +24,6 @@ pipeline {
                 }
             }
         }
-
-
         stage('Install Dependencies') {
             steps {
                sh """
@@ -36,8 +33,6 @@ pipeline {
                """
             }
         }
-
-
         stage('Build'){
             steps{
                 sh """
@@ -46,7 +41,7 @@ pipeline {
                 """
             }
         }
-
+      
 
         stage('Nexus Artifact Upload'){
             steps{
@@ -69,8 +64,12 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy'){
+            when{
+                expression{
+                    params.deploy
+                }
+            }
             steps{
                 script{
                     def params = [
@@ -81,8 +80,6 @@ pipeline {
             }
         }
     }
-
-}
     post { 
         always { 
             echo 'I will always say Hello again!'
@@ -95,8 +92,4 @@ pipeline {
             echo 'I will run when pipeline is failure'
         }
     }
-
-
-
-
-
+}
